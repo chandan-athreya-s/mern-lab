@@ -1,0 +1,8 @@
+first use npx create-react-app
+
+then npm install axios
+
+for running json in ./mern-lab/lab9 :- npx json-server --watch db.json --port 5000
+
+
+to run app:- npm start
