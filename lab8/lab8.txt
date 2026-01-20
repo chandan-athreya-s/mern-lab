@@ -1,0 +1,119 @@
+/******************************************************
+ PROGRAM 08
+ MongoDB Aggregation Pipeline with Text Search
+ Catalog Collection
+******************************************************/
+
+/*----------------------------------------------------
+ STEP 1: Start MongoDB Shell
+----------------------------------------------------*/
+mongosh
+
+
+/*----------------------------------------------------
+ STEP 2: Create / Use Database
+----------------------------------------------------*/
+use catalogDB
+
+
+/*----------------------------------------------------
+ STEP 3: Insert Sample Data into catalog Collection
+ Text-rich fields: name, description, tags
+----------------------------------------------------*/
+db.catalog.insertMany([
+  {
+    item_id: "A001",
+    name: "Classic Leather Backpack",
+    description: "Durable leather backpack with multiple compartments, perfect for daily commute or light travel.",
+    tags: ["leather", "backpack", "travel", "work"],
+    price: 120.00,
+    in_stock: true
+  },
+  {
+    item_id: "A002",
+    name: "Ergonomic Office Chair",
+    description: "Adjustable office chair with lumbar support and breathable mesh, ideal for long working hours.",
+    tags: ["office", "chair", "ergonomic", "comfort"],
+    price: 280.00,
+    in_stock: false
+  },
+  {
+    item_id: "A003",
+    name: "Durable Cotton T-Shirt",
+    description: "A soft and durable t-shirt made from 100% organic cotton. Eco-friendly and comfortable.",
+    tags: ["cotton", "tshirt", "organic", "eco-friendly"],
+    price: 25.00,
+    in_stock: true
+  }
+]);
+
+
+/*----------------------------------------------------
+ STEP 4: Create Text Index
+ NOTE:
+ - Only ONE text index is allowed per collection
+ - We index name, description, and tags
+----------------------------------------------------*/
+db.catalog.createIndex({
+  name: "text",
+  description: "text",
+  tags: "text"
+});
+
+
+/*====================================================
+ STEP 5: Aggregation Pipeline with Text Search
+====================================================*/
+
+/*----------------------------------------------------
+ Goal:
+ Find catalog items containing words
+ "durable" OR "backpack"
+----------------------------------------------------*/
+db.catalog.aggregate([
+
+  // Stage 1: Match documents using text search
+  {
+    $match: {
+      $text: {
+        $search: "durable backpack"
+      }
+    }
+  },
+
+  // Stage 2: Project required fields + relevance score
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      price: 1,
+      score: { $meta: "textScore" }
+    }
+  }
+
+]);
+
+
+/*----------------------------------------------------
+ STEP 6: Expected Output (Approximate)
+----------------------------------------------------*/
+/*
+[
+  {
+    "name": "Classic Leather Backpack",
+    "price": 120,
+    "score": 1.5
+  },
+  {
+    "name": "Durable Cotton T-Shirt",
+    "price": 25,
+    "score": 0.75
+  }
+]
+*/
+
+
+/******************************************************
+ END OF PROGRAM 08
+******************************************************/
+
