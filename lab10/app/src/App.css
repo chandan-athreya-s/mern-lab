@@ -1,0 +1,60 @@
+/* Reset default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Navigation bar */
+nav {
+  background-color: #1e293b; /* dark blue */
+  padding: 15px 30px;
+}
+
+/* Navigation list */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+/* Navigation links */
+nav ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+nav ul li a:hover {
+  background-color: #2563eb; /* blue */
+}
+
+/* Page container */
+div {
+  padding: 40px;
+}
+
+/* Headings */
+h1 {
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+/* Paragraph text */
+p {
+  font-size: 16px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* Center content (optional look) */
+main {
+  max-width: 800px;
+  margin: auto;
+}
